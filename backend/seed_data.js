@@ -10,7 +10,9 @@ async function seedData() {
             host: process.env.DB_HOST || 'localhost',
             user: process.env.DB_USER || 'root',
             password: process.env.DB_PASSWORD || 'password',
-            database: process.env.DB_NAME || 'mams_db'
+            database: process.env.DB_NAME || 'mams_db',
+            port: process.env.DB_PORT || 3306,
+            ssl: { rejectUnauthorized: false }
         });
 
         console.log("Clearing old data...");
@@ -22,7 +24,7 @@ async function seedData() {
         await connection.query('SET FOREIGN_KEY_CHECKS = 1');
 
         console.log("Ensuring admin user exists to attribute records to...");
-        let [users] = await connection.query('SELECT id FROM users WHERE username = "admin"');
+        let [users] = await connection.query("SELECT id FROM users WHERE username = 'admin'");
         let adminId;
         if (users.length === 0) {
             const hash = await bcrypt.hash('admin123', 10);
