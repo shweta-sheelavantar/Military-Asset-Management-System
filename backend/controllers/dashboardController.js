@@ -15,14 +15,14 @@ exports.getDashboardMetrics = async (req, res) => {
         let beforePurchasesCond = 'WHERE 1=1';
         let beforeToCond = 'WHERE 1=1';
         let beforeFromCond = 'WHERE 1=1';
-        let beforeAssignCond = 'WHERE status IN ("Assigned", "Expended")';
+        let beforeAssignCond = "WHERE status IN ('Assigned', 'Expended')";
 
         // For events DURING date range (to calculate Net Movement, etc.)
         const duringParams = [];
         let duringPurchasesCond = 'WHERE 1=1';
         let duringToCond = 'WHERE 1=1';
         let duringFromCond = 'WHERE 1=1';
-        let duringAssignCond = 'WHERE status IN ("Assigned", "Expended")';
+        let duringAssignCond = "WHERE status IN ('Assigned', 'Expended')";
 
         // 1. Base Filter
         if (base_id) {
@@ -92,8 +92,8 @@ exports.getDashboardMetrics = async (req, res) => {
         const [durIn] = await pool.query(`SELECT COALESCE(SUM(t.quantity), 0) as total FROM transfers t LEFT JOIN equipment e ON t.equipment_id = e.id ${duringToCond}`, duringParams);
         const [durOut] = await pool.query(`SELECT COALESCE(SUM(t.quantity), 0) as total FROM transfers t LEFT JOIN equipment e ON t.equipment_id = e.id ${duringFromCond}`, duringParams);
         
-        let duringAssignedCond = duringAssignCond.replace('IN ("Assigned", "Expended")', '= "Assigned"');
-        let duringExpendedCond = duringAssignCond.replace('IN ("Assigned", "Expended")', '= "Expended"');
+        let duringAssignedCond = duringAssignCond.replace("IN ('Assigned', 'Expended')", "= 'Assigned'");
+        let duringExpendedCond = duringAssignCond.replace("IN ('Assigned', 'Expended')", "= 'Expended'");
         
         const [durAssigned] = await pool.query(`SELECT COALESCE(SUM(a.quantity), 0) as total FROM assignments a LEFT JOIN equipment e ON a.equipment_id = e.id ${duringAssignedCond}`, duringParams);
         const [durExpended] = await pool.query(`SELECT COALESCE(SUM(a.quantity), 0) as total FROM assignments a LEFT JOIN equipment e ON a.equipment_id = e.id ${duringExpendedCond}`, duringParams);

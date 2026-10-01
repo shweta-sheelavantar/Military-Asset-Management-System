@@ -59,7 +59,7 @@ exports.getInventory = async (req, res) => {
         
         // Calculate assignments (Assigned or Expended remove from stock; Returned does not)
         const [assignments] = await pool.query(
-            'SELECT COALESCE(SUM(quantity), 0) as total FROM assignments WHERE base_id = ? AND equipment_id = ? AND status IN ("Assigned", "Expended")',
+            'SELECT COALESCE(SUM(quantity), 0) as total FROM assignments WHERE base_id = ? AND equipment_id = ? AND status IN (\'Assigned\', \'Expended\')',
             [baseId, equipmentId]
         );
         

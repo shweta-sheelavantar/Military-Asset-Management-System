@@ -40,7 +40,7 @@ exports.createAssignment = async (req, res) => {
         }
 
         const [result] = await connection.query(
-            'INSERT INTO assignments (base_id, equipment_id, personnel_name, quantity, status, recorded_by) VALUES (?, ?, ?, ?, "Assigned", ?)',
+            'INSERT INTO assignments (base_id, equipment_id, personnel_name, quantity, status, recorded_by) VALUES (?, ?, ?, ?, \'Assigned\', ?)',
             [base_id, equipment_id, personnel_name, assignQty, req.user.id]
         );
 
